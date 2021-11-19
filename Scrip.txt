@@ -1,0 +1,369 @@
+
+/*==============================================================*/
+/* Table: CLIENTE                                               */
+/*==============================================================*/
+create table CLIENTE 
+(
+   ID_CLIENTE          integer                        not null,
+   NOMBRE_CLIENTE       char(25)                       null,
+   DIRECCION_CLIENTE   char(25)                       null,
+   TELEFONO_CLIENTE     integer                        null,
+   NUM_CEDULA_CLI       integer                        not null,
+   constraint PK_CLIENTE primary key (ID_CLIENTE)
+);
+
+/*==============================================================*/
+/* Index: CLIENTE_PK                                            */
+/*==============================================================*/
+create unique index CLIENTE_PK on CLIENTE (
+ID_CLIENTE ASC
+);
+
+/*==============================================================*/
+/* Table: DETALLE_DE_LA_VENTA                                   */
+/*==============================================================*/
+create table DETALLE_DE_LA_VENTA 
+(
+   ID_DETALLE_VENTAS    integer                        not null,
+   ID_VENTA             integer                        null,
+   ID_PRODUCTO	        integer                        null,
+   CANTIDAD_VENTA       integer                        null,
+   PRECIO_PROTUCTO      float                          null,
+   TOTAL                float                          null,
+   constraint PK_DETALLE_DE_LA_VENTA primary key (ID_DETALLE_VENTAS)
+);
+
+/*==============================================================*/
+/* Index: DETALLE_DE_LA_VENTA_PK                                */
+/*==============================================================*/
+create unique index DETALLE_DE_LA_VENTA_PK on DETALLE_DE_LA_VENTA (
+ID_DETALLE_VENTAS ASC
+);
+
+/*==============================================================*/
+/* Index: TIENEDETALLE_FK                                       */
+/*==============================================================*/
+create index TIENEDETALLE_FK on DETALLE_DE_LA_VENTA (
+ID_PRODUCTO ASC
+);
+
+/*==============================================================*/
+/* Index: V_TIENE_DET_FK                                        */
+/*==============================================================*/
+create index V_TIENE_DET_FK on DETALLE_DE_LA_VENTA (
+ID_VENTA ASC
+);
+
+/*==============================================================*/
+/* Table: ESTADO_DEL_VENDEDOR                                   */
+/*==============================================================*/
+create table ESTADO_DEL_VENDEDOR 
+(
+   ID_ESTADO            integer                        not null,
+   DESCRIPCION_ESTADO   char(25)                       null,
+   constraint PK_ESTADO_DEL_VENDEDOR primary key (ID_ESTADO)
+);
+
+/*==============================================================*/
+/* Index: ESTADO_DEL_VENDEDOR_PK                                */
+/*==============================================================*/
+create unique index ESTADO_DEL_VENDEDOR_PK on ESTADO_DEL_VENDEDOR (
+ID_ESTADO ASC
+);
+
+
+
+/*==============================================================*/
+/* Table: PRODUCTO                                              */
+/*==============================================================*/
+create table PRODUCTO 
+(
+   ID_PRODUCTO			integer                        not null,
+   ID_PROVEEDOR        integer                        null,
+   NOMBRE_PRODUCTO      char(25)                       null,
+   COD_PRODUCTO         integer                        null,
+   COSTO                float                          null,
+   PRECIO               float                          null,
+   FECHA_VENCIMIENTO    date                           null,
+   STOCK               integer                        null,
+   UNIDAD               char(20)                       null,
+   constraint PK_PRODUCTO primary key (ID_PRODUCTO)
+);
+
+/*==============================================================*/
+/* Index: PRODUCTO_PK                                           */
+/*==============================================================*/
+create unique index PRODUCTO_PK on PRODUCTO (
+ID_PROVEEDOR ASC
+);
+
+/*==============================================================*/
+/* Index: P_TIENE_P_FK                                          */
+/*==============================================================*/
+create index P_TIENE_P_FK on PRODUCTO (
+ID_PROVEEDOR ASC
+);
+
+/*==============================================================*/
+/* Table: PROMOCION                                             */
+/*==============================================================*/
+create table PROMOCION 
+(
+   ID_PROMOCION         integer                        not null,
+   ID_PROVEEDOR			integer                        null,
+   ID_SUCURSAL          integer                        null,
+   FECHA_INI_PROMO      date                           null,
+   FECHA_FIN_PROMO      date                           null,
+   CANT_PROD_DES        float                          null,
+   PRECIO_FINL_DESC     float                          null,
+   constraint PK_PROMOCION primary key (ID_PROMOCION)
+);
+
+/*==============================================================*/
+/* Index: PROMOCION_PK                                          */
+/*==============================================================*/
+create unique index PROMOCION_PK on PROMOCION (
+ID_PROMOCION ASC
+);
+
+/*==============================================================*/
+/* Index: F_TIEN_P_FK                                           */
+/*==============================================================*/
+create index F_TIEN_P_FK on PROMOCION (
+ID_SUCURSAL ASC
+);
+
+/*==============================================================*/
+/* Index: P_TIENE_PROM_FK                                       */
+/*==============================================================*/
+create index P_TIENE_PROM_FK on PROMOCION (
+ID_PROVEEDOR ASC
+);
+
+/*==============================================================*/
+/* Table: PROVEEDOR                                             */
+/*==============================================================*/
+create table PROVEEDOR 
+(
+   ID_PROVEEDOR        integer                        not null,
+   COD_PROVE            integer                        not null,
+   NOMBRE_RAZON_SOCIAL  char(25)                       not null,
+   DIRECCION_PROVEEDOR  char(25)                       not null,
+   TELEFONO_PROVEEDOR   char(25)                       not null,
+   REPRE_LEGAL          char(30)                       null,
+   constraint PK_PROVEEDOR primary key (ID_PROVEEDOR)
+);
+
+/*==============================================================*/
+/* Index: PROVEEDOR_PK                                          */
+/*==============================================================*/
+create unique index PROVEEDOR_PK on PROVEEDOR (
+ID_PROVEEDOR ASC
+);
+
+/*==============================================================*/
+/* Table: SUCURSAL                                              */
+/*==============================================================*/
+create table SUCURSAL 
+(
+   ID_SUCURSAL          integer                        not null,
+   ID_PROVEEDOR        integer                        null,
+   CODIGO_SUCURSAL      integer                        null,
+   DIRECCION_SUCURSAL   char(20)                       not null,
+   TELEFONO_SUCURSAL    char(13)                       not null,
+   constraint PK_SUCURSAL primary key (ID_SUCURSAL)
+);
+
+/*==============================================================*/
+/* Index: SUCURSAL_PK                                           */
+/*==============================================================*/
+create unique index SUCURSAL_PK on SUCURSAL (
+ID_SUCURSAL ASC
+);
+
+/*==============================================================*/
+/* Index: P_PERTENECE_S_FK                                      */
+/*==============================================================*/
+create index P_PERTENECE_S_FK on SUCURSAL (
+ID_PROVEEDOR ASC
+);
+
+/*==============================================================*/
+/* Table: VENDEDOR                                              */
+/*==============================================================*/
+create table VENDEDOR 
+(
+   ID_VENDEDOR          integer                        not null,
+   ID_SUCURSAL          integer                        null,
+   ID_ESTADO            integer                        null,
+   NOMBRE_VENDEDOR      char(25)                       not null,
+   APELLIDOS_VENDEDOR  char(25)                       not null,
+   DIRECCION_VENDEDOR   char(25)                       not null,
+   FECHA_NACIMIENTO     date                           not null,
+   FECHA_INGRESO        date                           not null,
+   NUM_CEDULA_VEN       integer                        null,
+   TIPO_DE_SANGRE       char(8)                        null,
+   constraint PK_VENDEDOR primary key (ID_VENDEDOR)
+);
+
+/*==============================================================*/
+/* Index: VENDEDOR_PK                                           */
+/*==============================================================*/
+create unique index VENDEDOR_PK on VENDEDOR (
+ID_VENDEDOR ASC
+);
+
+/*==============================================================*/
+/* Index: S_TIENE_V_FK                                          */
+/*==============================================================*/
+create index S_TIENE_V_FK on VENDEDOR (
+ID_SUCURSAL ASC
+);
+
+/*==============================================================*/
+/* Index: V_CUENTA_E2_FK                                        */
+/*==============================================================*/
+create index V_CUENTA_E2_FK on VENDEDOR (
+ID_ESTADO ASC
+);
+/*==============================================================*/
+/* Table: PERIODO                                               */
+/*==============================================================*/
+create table PERIODO 
+(
+   
+   ID_PERIODO           integer                        not null,
+   FECHA_INI            date                           null,
+   FECHA_FIN            date                           null,
+   
+   
+   constraint PK_PERIODO primary key (ID_PERIODO)
+);
+/*==============================================================*/
+/* Table: VENTA                                                 */
+/*==============================================================*/
+create table VENTA 
+(
+   ID_VENTA             integer                        not null,
+   ID_SUCURSAL          integer                 			null,
+   ID_VENDEDOR          integer                        null,
+   ID_CLIENTE          integer                        null,
+   ID_PERIODO           integer                        null,
+   DESCUENTO            decimal                        null,
+   COD_VENTA            int                           null,
+	FECHA_VENTA          date                           null,
+   TOTAL_VENTA          float                          null,
+   PRECIO_FINAL_DESC    float                          null,
+   
+   constraint PK_VENTA primary key (ID_VENTA)
+);
+
+/*==============================================================*/
+/* Index: V_TIENE_V_FK                                          */
+/*==============================================================*/
+create  index V_TIENE_V_FK on VENTA (
+ID_SUCURSAL
+);
+
+
+/*==============================================================*/
+/* Index: VENTA_PK                                              */
+/*==============================================================*/
+create unique index VENTA_PK on VENTA (
+ID_VENTA ASC
+);
+
+/*==============================================================*/
+/* Index: V_REALIZA_V_FK                                        */
+/*==============================================================*/
+create index V_REALIZA_V_FK on VENTA (
+ID_VENDEDOR ASC
+);
+
+/*==============================================================*/
+/* Index: C_TIENE_V_FK                                          */
+/*==============================================================*/
+create index C_TIENE_V_FK on VENTA (
+ID_CLIENTE ASC
+);
+
+
+/*==============================================================*/
+/* Index: PERIODO_PK                                              */
+/*==============================================================*/
+create unique index PERIODO_PK on VENTA (
+ID_PERIODO ASC
+);
+
+alter table DETALLE_DE_LA_VENTA
+   add constraint FK_DETALLE__TIENEDETA_PRODUCTO foreign key (ID_PRODUCTO)
+      references PRODUCTO (ID_PRODUCTO)
+      on update restrict
+      on delete restrict;
+
+alter table DETALLE_DE_LA_VENTA
+   add constraint FK_DETALLE__V_TIENE_D_VENTA foreign key (ID_VENTA)
+      references VENTA (ID_VENTA)
+      on update restrict
+      on delete restrict;
+
+
+alter table PRODUCTO
+   add constraint FK_PRODUCTO_P_TIENE_P_PROVEEDO foreign key (ID_PROVEEDOR)
+      references PROVEEDOR (ID_PROVEEDOR)
+      on update restrict
+      on delete restrict;
+
+alter table PROMOCION
+   add constraint FK_PROMOCIO_F_TIEN_P_SUCURSAL foreign key (ID_SUCURSAL)
+      references SUCURSAL (ID_SUCURSAL)
+      on update restrict
+      on delete restrict;
+
+alter table PROMOCION
+   add constraint FK_PROMOCIO_P_TIENE_P_PRODUCTO foreign key (ID_PROVEEDOR)
+      references PRODUCTO (ID_PROVEEDOR)
+      on update restrict
+      on delete restrict;
+
+alter table SUCURSAL
+   add constraint FK_SUCURSAL_P_PERTENE_PROVEEDO foreign key (ID_PROVEEDOR)
+      references PROVEEDOR (ID_PROVEEDOR)
+      on update restrict
+      on delete restrict;
+
+alter table VENDEDOR
+   add constraint FK_VENDEDOR_S_TIENE_V_SUCURSAL foreign key (ID_SUCURSAL)
+      references SUCURSAL (ID_SUCURSAL)
+      on update restrict
+      on delete restrict;
+
+alter table VENDEDOR
+   add constraint FK_VENDEDOR_V_CUENTA__ESTADO_D foreign key (ID_ESTADO)
+      references ESTADO_DEL_VENDEDOR (ID_ESTADO)
+      on update restrict
+      on delete restrict;
+
+alter table VENTA
+   add constraint FK_VENTA_C_TIENE_V_CLIENTE foreign key (ID_CLIENTE)
+      references CLIENTE (ID_CLIENTE)
+      on update restrict
+      on delete restrict;
+
+
+alter table VENTA
+   add constraint FK_VENTA_V_REALIZA_VENDEDOR foreign key (ID_VENDEDOR)
+      references VENDEDOR (ID_VENDEDOR)
+      on update restrict
+      on delete restrict;
+	  
+alter table VENTA
+   add constraint FK_VENTA_V_TIENE_V_SUCURSAL foreign key (ID_SUCURSAL)
+      references SUCURSAL (ID_SUCURSAL)
+      on delete restrict on update restrict;
+	  
+alter table VENTA
+   add constraint FK_VENTA_V_REALIZA_PERIODO foreign key (ID_PERIODO)
+      references PERIODO (ID_PERIODO)
+      on update restrict
+      on delete restrict;
